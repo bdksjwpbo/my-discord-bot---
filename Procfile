@@ -1,0 +1,1 @@
+Enterworker: python bot.py
