@@ -3,22 +3,28 @@ from discord.ext import commands
 import asyncio
 import os
 
-# تعريف البوت ليناسب الحسابات الشخصية
-bot = commands.Bot(command_prefix="!", self_bot=True)
+# تعريف البوت ليعمل كحساب شخصي (Self-bot)
+bot = commands.Bot(command_prefix="!", self_bot=True, help_command=None)
 
 @bot.event
 async def on_ready():
     print(f'تم تسجيل الدخول بنجاح كحساب شخصي: {bot.user}')
 
-# أمر لعرض الأوامر
+# أمر لعرض قائمة التعليمات
 @bot.command()
 async def اوامر(ctx):
-    await ctx.send("قائمة الأوامر:\n!start_spam [الرسالة] - لبدء السبام\n!stop_spam - لإيقاف السبام\n!اوامر - لعرض القائمة")
+    instructions = (
+        "**قائمة أوامر البوت:**\n\n"
+        "`!start_spam [الرسالة]` : لبدء عملية السبام بالرسالة التي تحددها.\n"
+        "`!stop_spam` : لإيقاف عملية السبام فوراً.\n"
+        "`!اوامر` : لعرض هذه القائمة."
+    )
+    await ctx.send(instructions)
 
 # أمر لبدء السبام
 @bot.command()
 async def start_spam(ctx, *, message: str):
-    await ctx.send("بدء السبام...")
+    await ctx.send("بدء السبام... (أرسل !stop_spam للإيقاف)")
     bot.spamming = True
     while bot.spamming:
         await ctx.send(message)
@@ -30,5 +36,5 @@ async def stop_spam(ctx):
     bot.spamming = False
     await ctx.send("تم إيقاف السبام.")
 
-# تشغيل البوت باستخدام التوكن من Railway Variables
+# تشغيل البوت
 bot.run(os.getenv('TOKEN'))
