@@ -1,33 +1,38 @@
 import discord
 from discord.ext import commands
+import asyncio
 
 intents = discord.Intents.default()
 intents.message_content = True
-intents.members = True
 
 bot = commands.Bot(command_prefix="!", intents=intents)
 
-# أمر حذف جميع الرتب (عدا الرتبة الافتراضية)
+# أمر لعرض الأوامر
 @bot.command()
-@commands.has_permissions(administrator=True)
-async def delete_all_roles(ctx):
-    await ctx.send("بدء حذف الرتب...")
-    for role in ctx.guild.roles:
-        # لا يمكن حذف رتبة @everyone أو رتبة البوت نفسه
-        if role.name != "@everyone" and role != ctx.guild.me.top_role:
-            try:
-                await role.delete()
-            except:
-                continue
-    await ctx.send("تم الانتهاء من حذف الرتب المتاحة.")
+async def اوامر(ctx):
+    embed = discord.Embed(title="قائمة أوامر البوت", color=discord.Color.blue())
+    embed.add_field(name="!start_spam [الرسالة]", value="لبدء السبام", inline=False)
+    embed.add_field(name="!stop_spam", value="لإيقاف السبام", inline=False)
+    embed.add_field(name="!اوامر", value="لعرض هذه القائمة", inline=False)
+    await ctx.send(embed=embed)
 
-# أمر حذف جميع القنوات
+# أمر لبدء السبام
 @bot.command()
 @commands.has_permissions(administrator=True)
-async def delete_all_channels(ctx):
-    await ctx.send("بدء حذف جميع القنوات...")
-    for channel in ctx.guild.channels:
-        try:
-            await channel.delete()
-        except:
-            continue
+async def start_spam(ctx, *, message: str):
+    await ctx.send("بدء السبام... (أرسل !stop_spam للإيقاف)")
+    bot.spamming = True
+    while bot.spamming:
+        await ctx.send(message)
+        await asyncio.sleep(0.5) 
+
+# أمر لإيقاف السبام
+@bot.command()
+@commands.has_permissions(administrator=True)
+async def stop_spam(ctx):
+    bot.spamming = False
+    await ctx.send("تم إيقاف السبام.")
+
+# ملاحظة: لا تضع التوكن هنا، استخدم Variables في Railway
+import os
+bot.run(os.getenv('TOKEN'))
