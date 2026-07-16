@@ -1,26 +1,24 @@
 import discord
 from discord.ext import commands
 import asyncio
+import os
 
-intents = discord.Intents.default()
-intents.message_content = True
+# تعريف البوت كحساب شخصي (self_bot=True)
+bot = commands.Bot(command_prefix="!", self_bot=True)
 
-bot = commands.Bot(command_prefix="!", intents=intents)
+@bot.event
+async def on_ready():
+    print(f'تم تسجيل الدخول بنجاح كحساب شخصي: {bot.user}')
 
 # أمر لعرض الأوامر
 @bot.command()
 async def اوامر(ctx):
-    embed = discord.Embed(title="قائمة أوامر البوت", color=discord.Color.blue())
-    embed.add_field(name="!start_spam [الرسالة]", value="لبدء السبام", inline=False)
-    embed.add_field(name="!stop_spam", value="لإيقاف السبام", inline=False)
-    embed.add_field(name="!اوامر", value="لعرض هذه القائمة", inline=False)
-    await ctx.send(embed=embed)
+    await ctx.send("قائمة الأوامر:\n!start_spam [الرسالة] - لبدء السبام\n!stop_spam - لإيقاف السبام\n!اوامر - لعرض القائمة")
 
 # أمر لبدء السبام
 @bot.command()
-@commands.has_permissions(administrator=True)
 async def start_spam(ctx, *, message: str):
-    await ctx.send("بدء السبام... (أرسل !stop_spam للإيقاف)")
+    await ctx.send("بدء السبام...")
     bot.spamming = True
     while bot.spamming:
         await ctx.send(message)
@@ -28,11 +26,9 @@ async def start_spam(ctx, *, message: str):
 
 # أمر لإيقاف السبام
 @bot.command()
-@commands.has_permissions(administrator=True)
 async def stop_spam(ctx):
     bot.spamming = False
     await ctx.send("تم إيقاف السبام.")
 
-# ملاحظة: لا تضع التوكن هنا، استخدم Variables في Railway
-import os
+# تشغيل البوت
 bot.run(os.getenv('TOKEN'))
