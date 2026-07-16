@@ -3,8 +3,8 @@ from discord.ext import commands
 import asyncio
 import os
 
-# تعريف البوت ليعمل كحساب شخصي (Self-bot)
-bot = commands.Bot(command_prefix="!", self_bot=True, help_command=None)
+# الحل: تعريف البوت بهذه الطريقة يمنع خطأ BotBase.__init__
+bot = commands.Bot(command_prefix="!", self_bot=True)
 
 @bot.event
 async def on_ready():
