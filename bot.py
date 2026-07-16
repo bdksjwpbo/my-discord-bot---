@@ -3,7 +3,7 @@ from discord.ext import commands
 import asyncio
 import os
 
-# تعريف البوت كحساب شخصي (self_bot=True)
+# تعريف البوت ليناسب الحسابات الشخصية
 bot = commands.Bot(command_prefix="!", self_bot=True)
 
 @bot.event
@@ -30,5 +30,5 @@ async def stop_spam(ctx):
     bot.spamming = False
     await ctx.send("تم إيقاف السبام.")
 
-# تشغيل البوت
+# تشغيل البوت باستخدام التوكن من Railway Variables
 bot.run(os.getenv('TOKEN'))
