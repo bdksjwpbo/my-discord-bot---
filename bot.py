@@ -4,7 +4,7 @@ import asyncio
 import os
 
 # الحل النهائي: تعريف البوت مع تحديد البادئة كمعامل أساسي وتفعيل self_bot
-bot = commands.Bot(command_prefix="!", self_bot=True)
+bot = commands.Bot(command_prefix="!", self_bot=True, intents=discord.Intents.all())
 
 @bot.event
 async def on_ready():
