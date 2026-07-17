@@ -3,7 +3,7 @@ from discord.ext import commands
 import asyncio
 import os
 
-# الحل: تعريف البوت بهذه الطريقة يمنع خطأ BotBase.__init__
+# الحل النهائي: تعريف البوت مع تحديد البادئة كمعامل أساسي وتفعيل self_bot
 bot = commands.Bot(command_prefix="!", self_bot=True)
 
 @bot.event
